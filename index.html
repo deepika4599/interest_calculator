@@ -27,7 +27,7 @@ function parts(a,b){let m=(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.ge
 const ptext=p=>p.m+'.'+p.d,save=()=>{try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}};
 function addRow(date,principal,interest,p){s.rows.push({date,monthly:principal*s.rate/100,period:ptext(p),interest,expr:money(principal)+' + '+money(interest),updated:principal+interest});}
 function initial(rate,start,amount,end){s={rate,start,amount,principal:amount,total:0,last:end,rows:[],deductions:[],cycleStart:start};let a=dt(start),b=dt(end),cursor=a,principal=amount;
-while(addm(s.cycleStart,12)<=b){let y=addm(s.cycleStart,12),p=parts(cursor,y),i=principal*(rate/100)*12;addRow(iso(y),principal,i,p);principal+=i;s.total+=i;cursor=y;s.cycleStart=iso(y)}
+while(addm(dt(s.cycleStart),12)<=b){let y=addm(dt(s.cycleStart),12){let y=addm(s.cycleStart,12),p=parts(cursor,y),i=principal*(rate/100)*12;addRow(iso(y),principal,i,p);principal+=i;s.total+=i;cursor=y;s.cycleStart=iso(y)}
 if(cursor<b){let p=parts(cursor,b),i=principal*rate/100*(p.m+p.d/30);addRow(end,principal,i,p);principal+=i;s.total+=i}
 s.principal=principal;s.last=end;save();render()}
 function render(){if(!s)return;['summary','history'].forEach(x=>$(x).classList.remove('hidden'));$('principalNow').textContent=money(s.principal);$('interestNow').textContent=money(s.total);$('dateNow').textContent=showdate(s.last);$('rows').innerHTML='';
